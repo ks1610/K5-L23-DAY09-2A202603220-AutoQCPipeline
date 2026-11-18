@@ -1,3 +1,4 @@
+# Day 09 Lab — Trịnh Vinh Khánh: 2A202603220 - Trịnh Vinh Khánh
 <p align="center">
   <img src="docs/assets/hero.png" alt="Day 09 Lab: pipeline kiểm nhãn tự động" width="100%">
 </p>

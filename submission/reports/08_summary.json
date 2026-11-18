@@ -1,0 +1,18 @@
+{
+  "verdict": {
+    "decision": "Release",
+    "n_errors": 0,
+    "n_warn_images": 13,
+    "n_images": 193,
+    "warn_ratio": 0.0674,
+    "reasons": [
+      "không còn lỗi bắt buộc; 13/193 ảnh còn cảnh báo (tỉ lệ 0.0674 < ngưỡng 0.1)"
+    ]
+  },
+  "reviewed": 80,
+  "budget": 80,
+  "seconds": 7.5,
+  "exported": "D:\\Trinh\\vinuni\\day09\\K5-L23-DAY09-2A202603220-AutoQCPipeline\\submission\\export\\clean_v1",
+  "config_sha1": "2d76848893d62f92a3c35dabb0dde384f214a9e3",
+  "review_sim_sha1": "7988ca22827f780a7043a2300490e679a1697154"
+}

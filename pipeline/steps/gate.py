@@ -19,6 +19,53 @@ Trả về dict: decision, n_errors, n_warn_images, n_images, warn_ratio (làm t
 from ..common import ERROR, WARN  # noqa: F401
 
 
+# def decide(issues, image_stems, cfg, reviewed=frozenset()):
+#     # TODO
+#     raise NotImplementedError("gate chưa làm")
+
+from collections import Counter
+
+
 def decide(issues, image_stems, cfg, reviewed=frozenset()):
-    # TODO
-    raise NotImplementedError("gate chưa làm")
+    stems = set(image_stems)                     # tập tên ảnh hợp lệ
+    n_images = len(stems)
+
+    # Lỗi bắt buộc: luôn tính, không bỏ qua dù ảnh đã được duyệt
+    errors = [i for i in issues if i.severity == ERROR]
+
+    # Ảnh có cảnh báo: chỉ đếm ảnh thật, bỏ ảnh đã duyệt, đếm theo ảnh chứ không theo issue
+    warn_images = {i.image for i in issues
+                   if i.severity == WARN and i.image in stems and i.image not in reviewed}
+    n_warn = len(warn_images)
+
+    # Tỉ lệ cảnh báo; tránh chia cho 0 khi không có ảnh nào
+    ratio = round(n_warn / n_images, 4) if n_images else 0.0
+    threshold = cfg["gate"]["warn_ratio_hold"]
+
+    reasons = []
+    if errors:
+        decision = "Rework"
+        codes = Counter(i.code for i in errors)  # đếm theo mã lỗi để giải thích
+        detail = ", ".join(f"{c} x{n}" for c, n in codes.items())
+        reasons.append(f"còn {len(errors)} lỗi bắt buộc chưa sửa ({detail})")
+    elif ratio >= threshold:
+        decision = "Hold"
+        reasons.append(
+            f"không còn lỗi bắt buộc, nhưng {n_warn}/{n_images} ảnh còn cảnh báo "
+            f"(tỉ lệ {ratio:.4f} >= ngưỡng {threshold})"
+        )
+    else:
+        decision = "Release"
+        reasons.append(
+            f"không còn lỗi bắt buộc; {n_warn}/{n_images} ảnh còn cảnh báo "
+            f"(tỉ lệ {ratio:.4f} < ngưỡng {threshold})"
+        )
+
+    return {
+        "decision": decision,
+        "n_errors": len(errors),
+        "n_warn_images": n_warn,
+        "n_images": n_images,
+        "warn_ratio": ratio,
+        "reasons": reasons,
+    }
