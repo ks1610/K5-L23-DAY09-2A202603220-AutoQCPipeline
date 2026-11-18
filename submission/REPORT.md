@@ -58,8 +58,6 @@ img_0084.jpg & img_0074.jpg
 Chỗ calibration có thể đánh lừa: ngưỡng second_opinion.conf được chọn là 0.80, điểm cuối của lưới sweep (0.1–0.8). 
 Ngưỡng này làm precision tăng vì giữ lại ít dự đoán hơn, không phải vì check chính xác hơn: ví dụ img_0127 có 8 cảnh báo MISSING với conf 0.32–0.68, và các cảnh báo này biến mất ở ngưỡng 0.80. 
 Hệ quả trực tiếp: cùng pipeline, ngưỡng 0.25 cho HOLD (60/205 ảnh còn cảnh báo, tỉ lệ 0.2927), còn ngưỡng 0.80 cho RELEASE (13/193, tỉ lệ 0.0674). 
-Bảng calibration không thể hiện ảnh hưởng này, nên phải chạy lại pipeline để đánh giá. 
-Ngoài ra, kết luận RELEASE còn phụ thuộc vào việc sáu ảnh thiếu nhãn (img_0031, img_0053, img_0126, img_0135, img_0170, img_0219) được gán bằng cách copy từ review_reference; nếu không có bước này, kết quả là REWORK bất kể ngưỡng nào.
 ```
 ## 4. Cửa chặn và điều pipeline KHÔNG bắt được
 (a) chứng minh gate chặn đúng: chạy `python -m pipeline.run --budget 0 --reports work/rep_nb --export-dir work/exp_nb` (không có người duyệt nên ảnh thiếu file nhãn còn nguyên), chỉ ra kết luận **Rework**, mã thoát 20 và việc **không xuất** dataset. (Đừng sửa tay `work/run/ds`: pipeline dựng lại thư mục này từ raw mỗi lần chạy.) 
